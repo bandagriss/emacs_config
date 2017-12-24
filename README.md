@@ -4,18 +4,18 @@ Esta es una recopilación de los paquetes básicos necesarios para poder program
 
 Antes de la instalación debe tener instalado emacs 24 ó superior.
 
-### Instalación  ###
+## Instalación  ##
 
     git clone git@github.com:bandagriss/emacs_config.git
     
-#### Preparando los archivos ####
+**Preparando los archivos**
 
 Para realizar el enlace simbolico no debe existir el archivo ~/.emacs y tampoco la carpeta ~/.emacs.d puede realizar un backup  de su configuración actual para no perderla y luego realizar lo siguiente.
 
     rm ~/.emacs
     rm -rf ~/.emacs.d
     
-#### Creando un enlace simbolico ####
+**Creando un enlace simbolico**
 
 Entramos a emacs_config
 
@@ -33,7 +33,7 @@ Posteriormente ya podriamos abrir emacs
 
     emacs -nw mi_proyecto
     
-### Paquetes del Sistema ###
+## Paquetes del Sistema ##
 
 Para que funcione correctamente debe tener instalado 
 
