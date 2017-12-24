@@ -42,3 +42,4 @@ Para que funcione correctamente debe tener instalado
     sudo pip install elpy jedi flake8 importmagic autopep8 yapf epc
     sudo apt-get install elpa-helm-projectile
     sudo apt-get install markdown
+    sudo npm install -g eslint
