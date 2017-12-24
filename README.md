@@ -4,6 +4,8 @@ Esta es una recopilación de los paquetes básicos necesarios para poder program
 
 Antes de la instalación debe tener instalado emacs 24 ó superior.
 
+![Prueba Python](captura.png)
+
 ## Instalación  ##
 
     git clone git@github.com:bandagriss/emacs_config.git
@@ -33,6 +35,8 @@ Posteriormente ya podriamos abrir emacs
 
     emacs -nw mi_proyecto
     
+El proceso de abrir puede durar varios minutos la primera vez ya que se descargaran los paquetes automaticamente.
+
 ## Paquetes del Sistema ##
 
 Para que funcione correctamente debe tener instalado 
@@ -43,3 +47,5 @@ Para que funcione correctamente debe tener instalado
     sudo apt-get install elpa-helm-projectile
     sudo apt-get install markdown
     sudo npm install -g eslint
+    
+*Creado por Roy*
