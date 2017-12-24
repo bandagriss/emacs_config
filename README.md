@@ -48,4 +48,12 @@ Para que funcione correctamente debe tener instalado
     sudo apt-get install markdown
     sudo npm install -g eslint
     
+### Extras ###
+    
+**Activando Yasnippet para modo web**
+
+    mkdir ~/.emacs.d/elpa/yasnippet-0.12.2/snippets/web-mode
+    
+    echo "html-mode" >> ~/.emacs.d/elpa/yasnippet-0.12.2/snippets/web-mode/.yas-parents
+    
 *Creado por Roy*

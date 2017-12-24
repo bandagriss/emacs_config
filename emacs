@@ -1,21 +1,20 @@
 ;; lista de packetes que instalaremos
-(setq package-list '(dracula-theme auto-complete emmet-mode web-mode ac-html multiple-cursors smartparens flx-ido git-gutter yasnippet ag helm-ag helm-projectile neotree undo-tree which-key js2-mode use-package elpy flycheck xclip hlinum duplicate-thing rainbow-mode markdown-mode))
+(setq package-list '(dracula-theme auto-complete emmet-mode web-mode ac-html multiple-cursors smartparens flx-ido git-gutter yasnippet ag helm-ag helm-projectile neotree undo-tree which-key js2-mode use-package elpy flycheck xclip rainbow-mode markdown-mode))
 ;; lista de repositorios que contienen nuestros paquetes
 
-;; (setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
-;;                          ("gnu" . "http://elpa.gnu.org/packages/")
-;;                          ("melpa" . "http://melpa.org/packages/")))
-(require 'package) ;; You might already have this line
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
-       (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
-  (add-to-list 'package-archives (cons "melpa" url) t))
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-  (add-to-list 'package-archives
-               '("melpa-stable" . "https://stable.melpa.org/packages/")))
-
+(setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")))
+;;                         ("melpa" . "http://melpa.org/packages/")))
+;; (require 'package) ;; You might already have this line
+;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+;;                     (not (gnutls-available-p))))
+;;        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
+;;   (add-to-list 'package-archives (cons "melpa" url) t))
+;; (when (< emacs-major-version 24)
+;;   ;; For important compatibility libraries like cl-lib
+;;   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+;;   (add-to-list 'package-archives
+;;                '("melpa-stable" . "https://stable.melpa.org/packages/")))
 
 (package-initialize)
 
@@ -36,9 +35,6 @@
 ;;------------------------------------autocomplete------------------------
 (global-auto-complete-mode)
 
-;;------------------------------------emmet------------------------
-(add-hook 'web-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
 
 ;;------------------------------------web-mode------------------------
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -49,6 +45,11 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+
+;;------------------------------------emmet------------------------
+(add-hook 'web-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook 'emmet-mode) ;; enable Emmet's css abbreviation.
 
 ;;------------------------------------ac-html------------------------
 (add-hook 'web-mode-hook 'ac-html-enable)
@@ -60,8 +61,25 @@
 (smartparens-global-mode 1)
 
 ;;------------------------------------duplicate-thing-line-or ------------------------
-(global-set-key (kbd "M-c") 'duplicate-thing)
+;;(global-set-key (kbd "M-c") 'duplicate-thing)
+(defun duplicate-current-line-or-region (arg)
+  (interactive "p")
+  (let (beg end (origin (point)))
+    (if (and mark-active (> (point) (mark)))
+        (exchange-point-and-mark))
+    (setq beg (line-beginning-position))
+    (if mark-active
+        (exchange-point-and-mark))
+    (setq end (line-end-position))
+    (let ((region (buffer-substring-no-properties beg end)))
+      (dotimes (i arg)
+        (goto-char end)
+        (newline)
+        (insert region)
+        (setq end (point)))
+      (goto-char (+ origin (* (length region) arg) arg)))))
 
+(global-set-key (kbd "M-c") 'duplicate-current-line-or-region)
 ;;------------------------------------flx-ido ------------------------
 (ido-mode 1)
 (ido-everywhere 1)
@@ -90,7 +108,7 @@
 
 ;;------------------------------------yasnipets------------------------
 (add-to-list 'load-path
-              "~/.emacs.d/plugins/yasnippet")
+             "~/.emacs.d/elpa/yasnippet-0.12.2/snippets")
 (yas-global-mode 1)
 
 ;;------------------------------------restclient------------------------
@@ -143,7 +161,7 @@
 (global-set-key (kbd "C-x f") 'helm-projectile-find-file)
 
 ;;------------------------------------hlinum------------------------
-(hlinum-activate)
+;;(hlinum-activate)
 (global-hl-line-mode t)
 (set-face-background 'hl-line "#4e4e4e")
 
@@ -158,7 +176,8 @@
   (interactive)
   (revert-buffer :ignore-auto :noconfirm))
 ;;javascript 2 espacios
-(setq js-indet-level 2)
+;;(setq js-indet-level 2)
+(add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
 ;;parentesis
 (show-paren-mode 1)
 ;;(require 'paren)
@@ -175,6 +194,9 @@
 
 ;;Siguiente
 
+
+
+;;Creado por Roy
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -182,13 +204,10 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (parent-mode paren-face ag multiple-cursors ac-html web-mode emmet-mode auto-complete dracula-theme))))
+    (markdown-mode rainbow-mode xclip flycheck elpy use-package js2-mode which-key undo-tree neotree helm-ag ag yasnippet git-gutter smartparens multiple-cursors ac-html web-mode emmet-mode auto-complete dracula-theme helm-projectile flx-ido dash-functional dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-
-;;Creado por Roy
