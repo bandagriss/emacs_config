@@ -47,6 +47,8 @@ Para que funcione correctamente debe tener instalado
     sudo apt-get install elpa-helm-projectile
     sudo apt-get install markdown
     sudo npm install -g eslint
+    sudo apt-get install php-cli
+    sudo apt-get install cscope
     
 ### Extras ###
     

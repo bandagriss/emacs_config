@@ -1,5 +1,5 @@
 ;; lista de packetes que instalaremos
-(setq package-list '(dracula-theme auto-complete emmet-mode web-mode ac-html multiple-cursors smartparens flx-ido git-gutter yasnippet ag helm-ag helm-projectile neotree undo-tree which-key js2-mode use-package elpy flycheck xclip rainbow-mode markdown-mode))
+(setq package-list '(dracula-theme auto-complete emmet-mode web-mode ac-html multiple-cursors smartparens flx-ido git-gutter yasnippet ag helm-ag helm-projectile neotree undo-tree which-key js2-mode use-package elpy flycheck xclip rainbow-mode markdown-mode json-mode php-mode ac-php))
 ;; lista de repositorios que contienen nuestros paquetes
 
 (setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
@@ -46,6 +46,7 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.blade\\.php\\'" . web-mode))
 
 ;;------------------------------------emmet------------------------
 (add-hook 'web-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
@@ -53,6 +54,10 @@
 
 ;;------------------------------------ac-html------------------------
 (add-hook 'web-mode-hook 'ac-html-enable)
+
+;;------------------------------------ac-php------------------------
+(add-hook 'php-mode-hook 'ac-php-mode)
+
 
 ;;------------------------------------multiple-cursors------------------------
 (global-set-key (kbd "C-^") 'mc/mark-next-like-this)
@@ -165,6 +170,19 @@
 (global-hl-line-mode t)
 (set-face-background 'hl-line "#4e4e4e")
 
+;;------------------------------------ac-php------------------------
+(add-hook 'php-mode-hook
+            '(lambda ()
+               (auto-complete-mode t)
+               (require 'ac-php)
+               (setq ac-sources  '(ac-source-php ) )
+               (yas-global-mode 1)
+
+               (ac-php-core-eldoc-setup ) ;; enable eldoc
+               (define-key php-mode-map  (kbd "C-]") 'ac-php-find-symbol-at-point)   ;goto define
+               (define-key php-mode-map  (kbd "C-t") 'ac-php-location-stack-back)    ;go back
+               ))
+
 
 
 ;;------------------------------------configuracion editor------------------------
@@ -188,6 +206,8 @@
 (global-auto-revert-mode 1)
 (xterm-mouse-mode t)
 
+(global-set-key (kbd "M-p") 'previous-buffer)
+(global-set-key (kbd "M-n") 'next-buffer)
 
 
 
@@ -204,7 +224,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (markdown-mode rainbow-mode xclip flycheck elpy use-package js2-mode which-key undo-tree neotree helm-ag ag yasnippet git-gutter smartparens multiple-cursors ac-html web-mode emmet-mode auto-complete dracula-theme helm-projectile flx-ido dash-functional dash))))
+    (nodejs-repl json-mode markdown-mode rainbow-mode xclip flycheck elpy use-package js2-mode which-key undo-tree neotree helm-ag ag yasnippet git-gutter smartparens multiple-cursors ac-html web-mode emmet-mode auto-complete dracula-theme helm-projectile flx-ido dash-functional dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
