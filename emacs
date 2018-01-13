@@ -47,6 +47,14 @@
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.blade\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+
+;; Customizations
+(setq web-mode-markup-indent-offset 2)
+(setq web-mode-css-indent-offset 2)
+(setq web-mode-code-indent-offset 2)
+(setq web-mode-disable-autocompletion t)
+(local-set-key (kbd "RET") 'newline-and-indent)
 
 ;;------------------------------------emmet------------------------
 (add-hook 'web-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
@@ -130,22 +138,35 @@
 (which-key-mode)
 
 ;;-------------------------------------config javascript-----------------------
-(use-package js2-mode :ensure t :defer t
-  :mode (("\\.js\\'" . js2-mode)
-         ("\\.json\\'" . javascript-mode))
-  :commands js2-mode
-  :init (progn
-          (setq-default js2-basic-offset 2
-                        js2-indent-switch-body t
-                        js2-auto-indent-p t
-                        js2-global-externs '("angular")
-                        js2-indent-on-enter-key t
-                        flycheck-disabled-checkers '(javascript-jshint)
-                        flycheck-checkers '(javascript-eslint)
-                        flycheck-eslintrc "~/.eslintrc"))
-          (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
-          ;; (add-to-list 'js2-mode-hook 'flycheck-mode)
-          )
+;; (use-package js2-mode :ensure t :defer t
+;;   :mode (("\\.js\\'" . js2-mode)
+;;          ("\\.json\\'" . javascript-mode))
+;;   :commands js2-mode
+;;   :init (progn
+;;           (setq-default js2-basic-offset 2
+;;                         js2-indent-switch-body t
+;;                         js2-auto-indent-p t
+;;                         js2-global-externs '("angular")
+;;                         js2-indent-on-enter-key t
+;;                         flycheck-disabled-checkers '(javascript-jshint)
+;;                         flycheck-checkers '(javascript-eslint)
+;;                         flycheck-eslintrc "~/.eslintrc"))
+;;           (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
+;;           ;; (add-to-list 'js2-mode-hook 'flycheck-mode)
+;;           )
+
+(defun my/use-eslint-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (eslint (and root
+                      (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                        root))))
+    (when (and eslint (file-executable-p eslint))
+      (setq-local flycheck-javascript-eslint-executable eslint))))
+
+(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+(setq js-indent-level 2)
 
 
 ;;------------------------------------helm-projectile-ag------------------------
@@ -183,11 +204,14 @@
                (define-key php-mode-map  (kbd "C-t") 'ac-php-location-stack-back)    ;go back
                ))
 
+;;----------------------------------------configuracion para vue -----------
+(add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'js-mode)))
+(add-hook 'web-mode-hook #'(lambda () (yas-activate-extra-mode 'js2-mode)))
 
 
 ;;------------------------------------configuracion editor------------------------
 (setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
+(setq-default tab-width 2)
 (setq indent-line-function 'insert-tab)
 (setq make-backup-files nil)
 (defun revert-buffer-no-confirm ()
@@ -196,6 +220,7 @@
 ;;javascript 2 espacios
 ;;(setq js-indet-level 2)
 (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
+
 ;;parentesis
 (show-paren-mode 1)
 ;;(require 'paren)
@@ -209,6 +234,8 @@
 (global-set-key (kbd "M-p") 'previous-buffer)
 (global-set-key (kbd "M-n") 'next-buffer)
 
+;;ignorando archivos silversearch
+(add-to-list 'projectile-globally-ignored-directories "node_modules")
 
 
 
@@ -217,6 +244,7 @@
 
 
 ;;Creado por Roy
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -224,7 +252,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (nodejs-repl json-mode markdown-mode rainbow-mode xclip flycheck elpy use-package js2-mode which-key undo-tree neotree helm-ag ag yasnippet git-gutter smartparens multiple-cursors ac-html web-mode emmet-mode auto-complete dracula-theme helm-projectile flx-ido dash-functional dash))))
+    (ac-html-bootstrap ac-php php-mode json-mode markdown-mode rainbow-mode xclip flycheck elpy use-package js2-mode which-key undo-tree neotree helm-ag ag yasnippet git-gutter smartparens multiple-cursors ac-html web-mode emmet-mode auto-complete dracula-theme helm-projectile flx-ido dash-functional dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
