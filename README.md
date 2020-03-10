@@ -44,7 +44,7 @@ Para que funcione correctamente debe tener instalado
     sudo apt-get install silversearcher-ag
     sudo apt-get install xclip
     sudo pip install elpy jedi flake8 importmagic autopep8 yapf epc
-    sudo apt-get install elpa-helm-projectile
+    sudo apt-get install elpa-projectile
     sudo apt-get install markdown
     sudo npm install -g eslint
     sudo apt-get install php-cli
