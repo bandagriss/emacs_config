@@ -43,6 +43,8 @@ Para que funcione correctamente debe tener instalado
 
     sudo apt-get install silversearcher-ag
     sudo apt-get install xclip
+    sudo apt-get install python-pip
+    sudo pip install setuptools
     sudo pip install elpy jedi flake8 importmagic autopep8 yapf epc
     sudo apt-get install elpa-projectile
     sudo apt-get install markdown
